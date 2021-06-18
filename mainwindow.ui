@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>801</width>
+    <height>707</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>761</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="dataTable">
+     <item>
+      <widget class="QLabel" name="commodity">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="shoppingCart">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="orders">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>761</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="dataTableTag">
+     <item>
+      <widget class="QLabel" name="commodityTag">
+       <property name="text">
+        <string>Commodities:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="shoppingCartTag">
+       <property name="text">
+        <string>Shopping Cart:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="ordersTag">
+       <property name="text">
+        <string>Orders:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>338</y>
+      <width>761</width>
+      <height>294</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="operationsTable">
+     <item>
+      <layout class="QVBoxLayout" name="generalOperations_2">
+       <item>
+        <widget class="QLabel" name="generalOperations">
+         <property name="text">
+          <string>General Operations</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="signUp">
+         <property name="text">
+          <string>Sign Up</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="signIn">
+         <property name="text">
+          <string>Sign In</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="signOut">
+         <property name="text">
+          <string>Sign Out</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="editPassword">
+         <property name="text">
+          <string>Edit Password</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="consume">
+         <property name="text">
+          <string>Consume</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="charge">
+         <property name="text">
+          <string>Charge</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="customerOperations_2">
+       <item>
+        <widget class="QLabel" name="customerOperations">
+         <property name="text">
+          <string>Customer Operations</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addToCart">
+         <property name="text">
+          <string>Add to Cart</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="deleteInCart">
+         <property name="text">
+          <string>Delete in Cart</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="editInCart">
+         <property name="text">
+          <string>Edit in Cart</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="generateOrders">
+         <property name="text">
+          <string>Generate Orders</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="cancelOrders">
+         <property name="text">
+          <string>Cancel Orders</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pay">
+         <property name="text">
+          <string>Pay</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="merchantOperationsAndShow">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="userNameTag">
+           <property name="text">
+            <string>User Name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="userName">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="balanceTag">
+           <property name="text">
+            <string>Balance</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="balance">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="merchantOperations">
+           <property name="text">
+            <string>Merchant Operations</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="addCommodity">
+           <property name="text">
+            <string>Add Commodity</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="editPrice">
+           <property name="text">
+            <string>Edit Price</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="editAmount">
+           <property name="text">
+            <string>Edit Amount</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="discount">
+           <property name="text">
+            <string>Discount</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="inputOutputTable">
+       <item>
+        <widget class="QLabel" name="output">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="input"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="searchCommodity">
+         <property name="text">
+          <string>Search Commodity</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="send">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="exit">
+         <property name="text">
+          <string>Exit</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="getBalance">
+         <property name="text">
+          <string>Get Balance</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="showCommodity">
+         <property name="text">
+          <string>Show Commodity</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="showInCart">
+         <property name="text">
+          <string>Show in Cart</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="showOrders">
+         <property name="text">
+          <string>Show Orders</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>801</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
