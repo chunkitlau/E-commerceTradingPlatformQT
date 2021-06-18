@@ -639,7 +639,8 @@ int Server::write(std::string string) {
 	return SUCCESS;
 }
 
-int Server::handleConnect(char clientIP[], struct sockaddr_in clientAddr) {
+//void* Server::handleConnect(char clientIP[], struct sockaddr_in clientAddr) {
+void* Server::handleConnect(void *threadid) {
 	/*
 	while (true) {
 		std::string string;
@@ -659,16 +660,18 @@ int Server::handleConnect(char clientIP[], struct sockaddr_in clientAddr) {
 	Merchant* merchant = NULL;
 	Customer* customer = NULL;
 	while (true) {
+		Server::conn = *((int*)threadid);
 		Server::read(opt);
 		switch (std::stoi(opt))
 		{
 		case  0:
+			Server::cancelOrders(customer);
 			Commodity::saveCommodity("commodity.txt");
 			User::saveUser("user.txt");
 			string = "...disconnect ";
-			string += clientIP;
+			//string += clientIP;
 			string += ":";
-			string += ntohs(clientAddr.sin_port);
+			//string += ntohs(clientAddr.sin_port);
 			string += "\n";
 			Server::write(string);
 			return 0;
@@ -762,7 +765,8 @@ int Server::handleConnect(char clientIP[], struct sockaddr_in clientAddr) {
 			break;
 		}
 	}
-	return SUCCESS;
+	close(Server::conn);
+	return 0;
 }
 
 int Server::conn;
@@ -780,7 +784,9 @@ int main(int argc, char* argv[]) {
     char clientIP[INET_ADDRSTRLEN] = "";
     struct sockaddr_in clientAddr;
     socklen_t clientAddrLen = sizeof(clientAddr);
-	//pthread_t tids[NUM_THREADS];
+	pthread_t threads[NUM_THREADS];
+	int threadNum = 0;
+   	int indexes[NUM_THREADS];
     while (true) {
         std::cout << "...listening" << std::endl;
         Server::conn = accept(listenfd, (struct sockaddr*)&clientAddr, &clientAddrLen);
@@ -793,15 +799,22 @@ int main(int argc, char* argv[]) {
         inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
 		#endif
         std::cout << "...connect " << clientIP << ":" << ntohs(clientAddr.sin_port) << std::endl;
-        Server::handleConnect(clientIP, clientAddr);
-        close(Server::conn);
+        indexes[threadNum] = Server::conn;
+		int rc = pthread_create(&threads[threadNum], NULL, 
+                          Server::handleConnect, (void *)&(indexes[threadNum]));
+		if (rc){
+			std::cout << "Error:无法创建线程," << rc << std::endl;
+			exit(-1);
+		}
+		threadNum++;
     }
+	pthread_exit(NULL);
     close(listenfd);
 	Commodity::saveCommodity("commodity.txt");
 	User::saveUser("user.txt");
 	return 0;
 }
 
-// lin: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g
-// win: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g -lws2_32
+// lin: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g -lpthread
+// win: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g -lws2_32 -lpthread
 

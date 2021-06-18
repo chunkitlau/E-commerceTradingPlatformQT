@@ -97,7 +97,8 @@ public:
     static int socketInit(int &listenfd);
     static int read(std::string &string);
     static int write(std::string string);
-    static int handleConnect(char clientIP[], struct sockaddr_in clientAddr);
+    //static void* handleConnect(char clientIP[], struct sockaddr_in clientAddr);
+    static void* handleConnect(void *threadid);
     static int conn;
 protected:
 private:
