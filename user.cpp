@@ -88,9 +88,6 @@ int User::loadUser(std::string filename) {
         double balance;
         while (!userFile.eof()) {
             userFile >> type >> name >> password >> balance;
-            
-            //std::cout << type << " " << name << " " << password << " " << balance << std::endl;
-            
             if (type == "Merchant") {
                 _userMap[name] = new Merchant(name, password, balance);
             }
@@ -226,12 +223,3 @@ int Customer::editAmount(std::string description, int amount) {
 }
 
 std::map<std::string, User*> User::_userMap;
-
-/*
-int main(int argc, char* argv[]) {
-    return 0;
-    //Customer customer("root", "root");
-}
-*/
-// g++ user.cpp -o main -g
-// g++ user.cpp commodity.cpp -o main -g

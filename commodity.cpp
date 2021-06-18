@@ -8,6 +8,10 @@ int Commodity::getAmount() const {
     return _amount;
 }
 
+double Commodity::getOriginPrice() const {
+    return _price;
+}
+
 int Commodity::editPrice(double price) {
     _price = price;
     _commodityMap[_description]->_price = price;
@@ -30,7 +34,6 @@ int Commodity::addCommodity(Commodity* commodity) {
         return SUCCESS;
     }
     else {
-        delete commodity;
         return ERROR1;
     }
 }
@@ -81,7 +84,7 @@ int Commodity::saveCommodity(std::string filename) {
         }
         for (std::map<std::string, Commodity*>::iterator iter = _commodityMap.begin(); iter != _commodityMap.end(); ++iter) {
             commodityFile << iter->second->_type << " " << iter->first << " " 
-                << iter->second->_price << " " << iter->second->_amount << " " << iter->second->_merchant << std::endl;
+                << iter->second->getOriginPrice() << " " << iter->second->_amount << " " << iter->second->_merchant << std::endl;
         }
         return SUCCESS;
     }
@@ -211,10 +214,3 @@ double Electronic::_discount = 1;
 double Clothing::_discount = 1;
 
 std::map<std::string, Commodity*> Commodity::_commodityMap;
-
-/*
-int main(int argc, char* argv[]) {
-    //Customer customer("root", "root");
-}
-*/
-// g++ commodity.cpp -o main -g

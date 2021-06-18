@@ -62,7 +62,6 @@ int MainWindow::read(std::string &string) {
     socket->read(buf, sizeof(buf));
     int len = strlen(buf) + 1;
     qDebug() << len;
-    //int len = recv(Client::client, buf, sizeof(buf), 0);
     buf[len] = '\0';
     string = std::string(buf);
     return SUCCESS;
@@ -73,7 +72,6 @@ int MainWindow::write(std::string string) {
     int len = string.copy(buf, BUFSIZE);
     buf[len] = '\0';
     socket->write(buf, len);
-    //send(Client::client, buf, len, 0);
     return SUCCESS;
 }
 

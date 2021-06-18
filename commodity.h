@@ -36,6 +36,7 @@ public:
 	 * 计算价格
 	 */
 	virtual double getPrice() const = 0;
+	double getOriginPrice() const;
 	/**********************************************************
 	 * 获取描述
 	 */
