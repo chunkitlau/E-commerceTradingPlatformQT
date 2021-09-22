@@ -8,6 +8,10 @@
 
 《电商交易平台设计与实现》是北京邮电大学计算机学院大学二年级面向对象程序设计与实践（c++）课程设计（2021春）。本项目是基于c++语言的面向对象设计的简单电商交易平台，通过QT实现GUI，通过Socket和多线程实现多客户端。本项目为了课程设计而实现，虽然可以较为良好的运行，但是还有一些已知和未知的错误，可能会视情况更新。
 
+## 说明
+
+本项目是由前序项目[AccountAndCommoditySystem](https://github.com/chunkitlau/AccountAndCommoditySystem)，[TransactionSystem](https://github.com/chunkitlau/TransactionSystem)，[E-commerceTradingPlatform](https://github.com/chunkitlau/E-commerceTradingPlatform)发展而来，点击上述链接以访问对应项目。
+
 ## Copyright
 
 Copyright © 2021 Chunkit Lau. All rights reserved.
