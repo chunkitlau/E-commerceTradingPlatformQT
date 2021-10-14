@@ -10,11 +10,11 @@
 
 ## Explanation
 
-This project is composed of the previous project [AccountAndCommoditySystem](https://github.com/chunkitlau/AccountAndCommoditySystem), [TransactionSystem](https://github.com/chunkitlau/TransactionSystem), [E-commerceTradingPlatform](https://github.com/chunkitlau/E-commerceTradingPlatform), click the above link to access the corresponding project.
+This project is composed of the previous project [AccountAndCommoditySystem](https://github.com/chunkitlau/E-commerceTradingPlatformQT/tree/master-AccountAndCommoditySystem), [TransactionSystem](https://github.com/chunkitlau/E-commerceTradingPlatformQT/tree/master-TransactionSystem), [E-commerceTradingPlatform](https://github.com/chunkitlau/E-commerceTradingPlatformQT/tree/master-E-commerceTradingPlatform), click the above link to access the corresponding project.
 
 ## 说明
 
-本项目是由前序项目[AccountAndCommoditySystem](https://github.com/chunkitlau/AccountAndCommoditySystem)，[TransactionSystem](https://github.com/chunkitlau/TransactionSystem)，[E-commerceTradingPlatform](https://github.com/chunkitlau/E-commerceTradingPlatform)发展而来，点击上述链接以访问对应项目。
+本项目是由前序项目[AccountAndCommoditySystem](https://github.com/chunkitlau/E-commerceTradingPlatformQT/tree/master-AccountAndCommoditySystem)，[TransactionSystem](https://github.com/chunkitlau/E-commerceTradingPlatformQT/tree/master-TransactionSystem)，[E-commerceTradingPlatform](https://github.com/chunkitlau/E-commerceTradingPlatformQT/tree/master-E-commerceTradingPlatform)发展而来，点击上述链接以访问对应项目。
 
 ## Copyright
 
