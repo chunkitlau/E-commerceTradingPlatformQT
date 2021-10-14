@@ -1,4 +1,4 @@
-Book C++_Primer 20 2 merchant1
+Book C++_Primer 20 0 merchant1
 Book CSAPP 40 1 merchant3
 Book Effertive_C++ 30 1 merchant2
 Electronic Electronic2 80 8 merchant1

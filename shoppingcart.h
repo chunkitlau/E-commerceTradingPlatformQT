@@ -10,7 +10,7 @@
 
 #define LOGIN 1
 #define LOGOUT 0
-#define ERROR1 1
+#define ERROR 1
 #define ERROR_D -1
 #define SUCCESS 0
 #define EPS 1e-6
@@ -49,7 +49,7 @@ public:
     /**********************************************************
      * 网上支付：消费者使用余额支付订单，支付成功后，消费者被扣除的余额应转至商家余额中。
 	 */
-    int pay(std::string name, double &orderedTotalPrice);
+    int pay(std::string name);
 protected:
     double _orderedTotalPrice;
     std::map<std::string, Commodity*> _commodityMap, _orderedCommodityMap;

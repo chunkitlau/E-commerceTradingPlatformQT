@@ -10,7 +10,6 @@ std::string User::getName() {
 
 int User::signIn() {
     if (_userMap.find(_name) != _userMap.end() && 
-        _userMap.find(_name)->second->_type == _type &&
         _userMap.find(_name)->second->_password == _password) {
         _loginStatus = LOGIN;
         _userMap.find(_name)->second->_loginStatus = LOGIN;
@@ -18,7 +17,7 @@ int User::signIn() {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -34,7 +33,7 @@ int User::editPassword(std::string password) {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -54,7 +53,7 @@ int User::charge(double amount) {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -65,7 +64,7 @@ int User::consume(double amount) {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -82,7 +81,7 @@ int User::loadUser(std::string filename) {
     try {
         std::ifstream userFile(filename);
         if (!userFile.is_open()) {
-            return ERROR1;
+            return ERROR;
         }
         std::string type, name, password;
         double balance;
@@ -99,7 +98,7 @@ int User::loadUser(std::string filename) {
     }
     catch (const char* msg) {
         std::cerr << msg << std::endl;
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -107,7 +106,7 @@ int User::saveUser(std::string filename) {
     try {
         std::ofstream userFile(filename);
         if (!userFile.is_open()) {
-            return ERROR1;
+            return ERROR;
         }
         for (std::map<std::string, User*>::iterator iter = _userMap.begin(); iter != _userMap.end(); ++iter) {
             userFile << iter->second->_type << " " << iter->first << " " 
@@ -117,7 +116,7 @@ int User::saveUser(std::string filename) {
     }
     catch (const char* msg) {
         std::cerr << msg << std::endl;
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -147,7 +146,7 @@ int Merchant::signUp() {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -157,7 +156,7 @@ int Merchant::addCommodity(Commodity* commodity) {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -167,7 +166,7 @@ int Merchant::editPrice(std::string description, double price) {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -177,7 +176,7 @@ int Merchant::editAmount(std::string description, int amount) {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -207,19 +206,19 @@ int Customer::signUp() {
         return SUCCESS;
     }
     else {
-        return ERROR1;
+        return ERROR;
     }
 }
 int Customer::addCommodity(Commodity* commodity) {
-    return ERROR1;
+    return ERROR;
 }
 
 int Customer::editPrice(std::string description, double price) {
-    return ERROR1;
+    return ERROR;
 }
 
 int Customer::editAmount(std::string description, int amount) {
-    return ERROR1;
+    return ERROR;
 }
 
 std::map<std::string, User*> User::_userMap;

@@ -10,7 +10,7 @@
 
 #define LOGIN 1
 #define LOGOUT 0
-#define ERROR1 1
+#define ERROR 1
 #define ERROR_D -1
 #define SUCCESS 0
 #define EPS 1e-6

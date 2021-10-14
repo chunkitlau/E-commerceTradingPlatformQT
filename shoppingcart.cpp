@@ -62,32 +62,34 @@ int Shoppingcart::addCommodity(Commodity* commodity) {
         std::map<std::string, Commodity*>::iterator iter = _commodityMap.find(commodity->getDescription());
         if (iter != _commodityMap.end()) {
             if (iter->second->getAmount() + commodity->getAmount() <= existCommodity->getAmount()) {
-                iter->second->editPrice(existCommodity->getOriginPrice());
+                iter->second->editPrice(existCommodity->getPrice());
                 iter->second->editAmount(iter->second->getAmount() + commodity->getAmount());
                 delete commodity;
                 return SUCCESS;
             }
             else {
+                std::cout << "Add commodity error! we haven't enough commodities" << std::endl;
                 delete commodity;
-                return ERROR1;
+                return ERROR;
             }
         }
         else {
             if (commodity->getAmount() <= existCommodity->getAmount()) {
-                commodity->editPrice(existCommodity->getOriginPrice());
+                commodity->editPrice(existCommodity->getPrice());
                 _commodityMap[commodity->getDescription()] = commodity;
                 return SUCCESS;
             }
             else {
+                std::cout << "Add commodity error! we haven't enough commodities" << std::endl;
                 delete commodity;
-                return ERROR1;
+                return ERROR;
             }
-            
         }
     }
     else {
+        std::cout << "Add commodity error! commodity don't exist" << std::endl;
         delete commodity;
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -96,19 +98,21 @@ int Shoppingcart::deleteCommodity(Commodity* commodity) {
     if (iter != _commodityMap.end()) {
         if (iter->second->getAmount() >= commodity->getAmount()) {
             Commodity* existCommodity = Commodity::findCommodity(commodity->getDescription());
-            iter->second->editPrice(existCommodity->getOriginPrice());
+            iter->second->editPrice(existCommodity->getPrice());
             iter->second->editAmount(iter->second->getAmount() - commodity->getAmount());
             delete commodity;
             return SUCCESS;
         }
         else {
+            std::cout << "delete commodity error! we haven't enough commodity in shopping cart" << std::endl;
             delete commodity;
-            return ERROR1;
+            return ERROR;
         }
     }
     else {
+        std::cout << "delete commodity error! commodity don't exist in shopping cart" << std::endl;
         delete commodity;
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -117,19 +121,21 @@ int Shoppingcart::editCommodity(Commodity* commodity) {
     if (iter != _commodityMap.end()) {
         Commodity* existCommodity = Commodity::findCommodity(commodity->getDescription());
         if (commodity->getAmount() <= existCommodity->getAmount()) {
-            iter->second->editPrice(existCommodity->getOriginPrice());
+            iter->second->editPrice(existCommodity->getPrice());
             iter->second->editAmount(commodity->getAmount());
             delete commodity;
             return SUCCESS;
         }
         else {
+            std::cout << "edit commodity error! we haven't enough commodities" << std::endl;
             delete commodity;
-            return ERROR1;
+            return ERROR;
         }
     }
     else {
+        std::cout << "edit commodity error! commodity don't exist in shopping cart" << std::endl;
         delete commodity;
-        return ERROR1;
+        return ERROR;
     }
 }
 
@@ -143,15 +149,18 @@ int Shoppingcart::showCommodity(std::string &string) {
 
 int Shoppingcart::generateOrders(std::vector<std::string> &commodityList) {
     if (!_orderedCommodityMap.empty()) {
-        return ERROR1;
+        std::cout << "Generate orders error! you have order which has not been paid" << std::endl;
+        return ERROR;
     }
     for (std::vector<std::string>::iterator stringIter = commodityList.begin(); stringIter != commodityList.end(); ++stringIter) {
         if (_commodityMap.find(*stringIter) == _commodityMap.end()) {
-            return ERROR1;
+            std::cout << "Generate orders error! commodity in orders can't find in shopping cart" << std::endl;
+            return ERROR;
         }
         else if (_commodityMap.find(*stringIter)->second->getAmount() >
             Commodity::findCommodity(*stringIter)->getAmount()) {
-            return ERROR1;
+            std::cout << "Generate orders error! we haven't enough commodities" << std::endl;
+            return ERROR;
         }
     }
     _orderedTotalPrice = 0;
@@ -161,7 +170,7 @@ int Shoppingcart::generateOrders(std::vector<std::string> &commodityList) {
         _orderedCommodityMap[*stringIter] = orderedCommodity;
         _commodityMap.erase(commodityIter);
         Commodity* commodity = Commodity::findCommodity(*stringIter);
-        orderedCommodity->editPrice(commodity->getOriginPrice());
+        orderedCommodity->editPrice(commodity->getPrice());
         commodity->editAmount(commodity->getAmount() - orderedCommodity->getAmount());
         _orderedTotalPrice += orderedCommodity->getPrice() * orderedCommodity->getAmount();
     }
@@ -186,18 +195,18 @@ int Shoppingcart::cancelOrders() {
     return SUCCESS;
 }
 
-int Shoppingcart::pay(std::string name, double &orderedTotalPrice) {
+int Shoppingcart::pay(std::string name) {
     User* user = User::findUser(name);
     if (_orderedTotalPrice > user->getBalance() + EPS) {
-        return ERROR1;
+        std::cout << "pay error! we haven't enough balance" << std::endl;
+        return ERROR;
     }
     User::buying = 1;
     user->consume(_orderedTotalPrice);
-    orderedTotalPrice = _orderedTotalPrice;
     for (std::map<std::string, Commodity*>::iterator commodityIter = _orderedCommodityMap.begin(); commodityIter != _orderedCommodityMap.end(); ++commodityIter) {
         User::findUser(Commodity::findCommodity(commodityIter->second->getDescription())->getMerchant())->charge(commodityIter->second->getPrice() * commodityIter->second->getAmount());
     }
-    cancelOrders();
+    std::cout << "you have pay " << _orderedTotalPrice << std::endl;
     User::buying = 0;
     return SUCCESS;
 }
