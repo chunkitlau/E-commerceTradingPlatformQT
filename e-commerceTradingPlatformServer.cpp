@@ -1,5 +1,29 @@
 #include "e-commerceTradingPlatformServer.h"
 
+std::string Server::prompt = std::string("") + 
+	"\nUsage: enter the number representing the command \n" +
+	" 0 : exit system \n" + 
+	" 1 : sign up \n" + 
+	" 2 : show commodity \n" + 
+	" 3 : search commodity \n" + 
+	" 4 : sign in \n" + 
+	" 5 : sign out \n" + 
+	" 6 : edit password \n" + 
+	" 7 : get balance \n" + 
+	" 8 : consume \n" + 
+	" 9 : add commodity \n" + 
+	"10 : edit price \n" + 
+	"11 : edit amount \n" + 
+	"12 : charge \n" + 
+	"13 : add commodity to shopping cart \n" + 
+	"14 : delete commodity in shopping cart \n" + 
+	"15 : edit commodity in shopping cart \n" + 
+	"16 : show commodity in shopping cart \n" + 
+	"17 : generate orders \n" + 
+	"18 : cancel orders \n" + 
+	"19 : show orders \n" + 
+	"20 : pay \n";
+
 #ifdef _WIN32
 static void socket_init(void) {
 	WORD wVersionRequested;
@@ -16,13 +40,13 @@ static void socket_init(void) {
 
 int Server::signUp() {
 	std::string type, name, password;
-	Server::write("type(Merchant or Customer): ");
+	Server::write("type(merchant or customer): ");
 	Server::read(type);
 	Server::write("username: ");
 	Server::read(name);
 	Server::write("password: ");
 	Server::read(password);
-	if (type == "Merchant") {
+	if (type == "merchant") {
 		Merchant merchant(name, password);
 		if (merchant.signUp() == SUCCESS) {
 			Server::write("Signed up successfully! merchant " + name + "\n" + Server::prompt);
@@ -33,7 +57,7 @@ int Server::signUp() {
 			return ERROR1;
 		}
 	}
-	else if (type == "Customer"){
+	else if (type == "customer"){
 		Customer customer(name, password);
 		if (customer.signUp() == SUCCESS) {
 			Server::write("Signed up successfully! customer " + name + "\n" + Server::prompt);
@@ -154,14 +178,14 @@ int Server::getBalance(Merchant* &merchant, Customer* &customer) {
 		Server::write("Get balance error! please sign in first \n" + Server::prompt);
 		return ERROR1;
 	}
-	if (merchant && User::findUser(merchant->getName())->getBalance() != ERROR_D) {
+	if (merchant && merchant->getBalance() != ERROR_D) {
 		Server::write(merchant->getUserType() + " " + merchant->getName() + 
-			" 's balance is " + std::to_string(User::findUser(merchant->getName())->getBalance()) + "\n" + Server::prompt);
+			" 's balance is " + std::to_string(merchant->getBalance()) + "\n" + Server::prompt);
 		return SUCCESS;
 	}
-	else if (customer && User::findUser(customer->getName())->getBalance() != ERROR_D) {
+	else if (customer && customer->getBalance() != ERROR_D) {
 		Server::write(customer->getUserType() + " " + customer->getName() + 
-			" 's balance is " + std::to_string(User::findUser(customer->getName())->getBalance()) + "\n" + Server::prompt);
+			" 's balance is " + std::to_string(customer->getBalance()) + "\n" + Server::prompt);
 		return SUCCESS;
 	}
 	return SUCCESS;
@@ -177,10 +201,6 @@ int Server::consume(Merchant* &merchant, Customer* &customer) {
 	Server::write("consume balance: ");
 	Server::read(string);
 	double balance = stod(string);
-	if (balance < 0) {
-		Server::write("Consume balance error! consume balance < 0\n" + Server::prompt);
-		return ERROR1;
-	}
 	if (merchant && merchant->getUserStatus() == LOGIN) {
 		if (merchant->consume(balance) == SUCCESS) {
 			Server::write(merchant->getUserType() + " " + merchant->getName() + 
@@ -193,10 +213,6 @@ int Server::consume(Merchant* &merchant, Customer* &customer) {
 		}
 	}
 	else if (customer && customer->getUserStatus() == LOGIN) {
-		if (balance < 0) {
-			Server::write("Consume balance error! consume balance < 0\n" + Server::prompt);
-			return ERROR1;
-		}
 		if (customer->consume(balance) == SUCCESS) {
 			Server::write(customer->getUserType() + " " + customer->getName() + 
 				" consume balance " + std::to_string(balance) + " successfully \n" + Server::prompt);
@@ -226,10 +242,6 @@ int Server::addCommodity(Merchant* &merchant) {
 	Server::write("amount: ");
 	Server::read(string);
 	int amount = stoi(string);
-	if (price < 0 || amount < 0) {
-		Server::write("Add balance commodity error! price < 0 || amount < 0\n" + Server::prompt);
-		return ERROR1;
-	}
 	Commodity* commodity = NULL;
 	if (type == "Book") {
 		commodity = new Book(description, price, amount, merchant->getName());
@@ -254,6 +266,7 @@ int Server::addCommodity(Merchant* &merchant) {
 	}
 	else {
 		Server::write("add commodity error! already have commodity \n" + Server::prompt);
+		delete commodity;
 		return ERROR1;
 	}
 }
@@ -269,10 +282,6 @@ int Server::editPrice(Merchant* &merchant) {
 	Server::write("price: ");
 	Server::read(string);
 	double price = stod(string);
-	if (price < 0) {
-		Server::write("edit price error! price < 0 \n" + Server::prompt);
-		return ERROR1;
-	}
 	Commodity* commodity = Commodity::findCommodity(description);
 	if (commodity) {
 		commodity->editPrice(price);
@@ -297,10 +306,6 @@ int Server::editAmount(Merchant* &merchant) {
 	Server::write("amount: ");
 	Server::read(string);
 	int amount = stoi(string);
-	if (amount < 0) {
-		Server::write("edit amount error! amount < 0 \n" + Server::prompt);
-		return ERROR1;
-	}
 	Commodity* commodity = Commodity::findCommodity(description);
 	if (commodity) {
 		commodity->editAmount(amount);
@@ -323,10 +328,6 @@ int Server::charge(Customer* &customer) {
 	Server::write("charge balance: ");
 	Server::read(string);
 	double balance = stod(string);
-	if (balance < 0) {
-		Server::write("charge balance error! balance < 0 \n" + Server::prompt);
-		return ERROR1;
-	}
 	if (customer && customer->charge(balance) == SUCCESS) {
 		Server::write(customer->getUserType() + " " + customer->getName() + 
 			" charge balance " + std::to_string(balance) + " successfully \n" + Server::prompt);
@@ -341,17 +342,13 @@ int Server::addCommodityToShoppingCart(Customer* &customer) {
 		return ERROR1;
 	}
 	std::string type, description, string;
-	Server::write("type(Book, Electronic, Clothing): ");
+	Server::write("type: ");
 	Server::read(type);
 	Server::write("description: ");
 	Server::read(description);
 	Server::write("amount: ");
 	Server::read(string);
 	int amount = stoi(string);
-	if (amount < 0) {
-		Server::write("add commodity error! amount < 0 \n" + Server::prompt);
-		return ERROR1;
-	}
 	Commodity* commodity = NULL;
 	if (type == "Book") {
 		commodity = new Book(description, amount);
@@ -376,6 +373,7 @@ int Server::addCommodityToShoppingCart(Customer* &customer) {
 		Server::write(std::string("") +
 			"add commodity to shopping cart error! \n" + 
 			"commodity don't exist or we haven't enough commodities \n" + Server::prompt);
+		delete commodity;
 		return ERROR1;
 	}
 }
@@ -386,17 +384,13 @@ int Server::deleteCommodityInShoppingCart(Customer* &customer) {
 		return ERROR1;
 	}
 	std::string type, description, string;
-	Server::write("type(Book, Electronic, Clothing): ");
+	Server::write("type: ");
 	Server::read(type);
 	Server::write("description: ");
 	Server::read(description);
 	Server::write("amount: ");
 	Server::read(string);
 	int amount = stoi(string);
-	if (amount < 0) {
-		Server::write("delete commodity error! amount < 0 \n" + Server::prompt);
-		return ERROR1;
-	}
 	Commodity* commodity = NULL;
 	if (type == "Book") {
 		commodity = new Book(description, amount);
@@ -422,6 +416,7 @@ int Server::deleteCommodityInShoppingCart(Customer* &customer) {
 			"delete commodity to shopping cart error! \n" +
 			"commodity don't exist in shopping cart \n" + 
 			"or we haven't enough commodity in shopping cart \n" + Server::prompt);
+		delete commodity;
 		return ERROR1;
 	}
 }
@@ -432,17 +427,13 @@ int Server::editCommodityInShoppingCart(Customer* &customer) {
 		return ERROR1;
 	}
 	std::string type, description, string;
-	Server::write("type(Book, Electronic, Clothing): ");
+	Server::write("type: ");
 	Server::read(type);
 	Server::write("description: ");
 	Server::read(description);
 	Server::write("amount: ");
 	Server::read(string);
 	int amount = stoi(string);
-	if (amount < 0) {
-		Server::write("edit commodity error! amount < 0 \n" + Server::prompt);
-		return ERROR1;
-	}
 	Commodity* commodity = NULL;
 	if (type == "Book") {
 		commodity = new Book(description, amount);
@@ -468,6 +459,7 @@ int Server::editCommodityInShoppingCart(Customer* &customer) {
 			"edit commodity to shopping cart error! \n" +
 			"commodity don't exist in shopping cart \n" + 
 			"or we haven't enough commodity in shopping cart \n" + Server::prompt);
+		delete commodity;
 		return ERROR1;
 	}
 }
@@ -494,10 +486,6 @@ int Server::generateOrders(Customer* &customer) {
 	int num = stoi(string);
 	std::vector<std::string> commodityList;
 	std::string description;
-	if (num < 0) {
-		Server::write("generate orders error! num < 0 \n" + Server::prompt);
-		return ERROR1;
-	}
 	for (int k = 0; k < num; ++k) {
 		Server::write("description: ");
 		Server::read(description);
@@ -554,40 +542,6 @@ int Server::pay(Customer* &customer) {
 	}
 }
 
-int Server::discount(Merchant* &merchant) {
-	if (!(merchant && merchant->getUserStatus() == LOGIN)) {
-		Server::write("discount error! please sign in as merchant first \n" + Server::prompt);
-		return ERROR1;
-	}
-
-	std::string type, description, string;
-	Server::write("type(Book, Electronic, Clothing): ");
-	Server::read(type);
-	Server::write("discount: ");
-	Server::read(string);
-	double discount = stod(string);
-	if (discount < 0 || discount > 1) {
-		Server::write("discount error! discount < 0 || discount > 1 \n" + Server::prompt);
-		return ERROR1;
-	}
-	Commodity* commodity = NULL;
-	if (type == "Book") {
-		Book::setDiscount(discount);
-	}
-	else if (type == "Electronic") {
-		Electronic::setDiscount(discount);
-	}
-	else if (type == "Clothing") {
-		Clothing::setDiscount(discount);
-	}
-	else {
-		Server::write("type error \n + Server::prompt");
-		return ERROR1;
-	}
-	Server::write("you have successfully discount " + type + std::to_string(discount) + "\n" + Server::prompt);
-	return SUCCESS;
-}
-
 int Server::socketInit(int &listenfd) {
 	socket_init();
 	// socket
@@ -620,7 +574,7 @@ int Server::read(std::string &string) {
 	char buf[BUFSIZE];
 	memset(buf, 0, sizeof(buf));
 	std::string strin;
-	int len = recv(conn, buf, sizeof(buf), 0);
+	int len = recv(Server::conn, buf, sizeof(buf), 0);
 	buf[len] = '\0';
 	string = std::string(buf);
 	return SUCCESS;
@@ -630,126 +584,119 @@ int Server::write(std::string string) {
 	char buf[BUFSIZE];
 	int len = string.copy(buf, BUFSIZE);
 	buf[len] = '\0';
-    send(conn, buf, len, 0);
+    send(Server::conn, buf, len, 0);
 	return SUCCESS;
 }
 
-void* Server::handleConnect(void *threadid) {
-	Server *server = ((Server*)threadid);
-	server->write(server->prompt);
+int Server::handleConnect(char clientIP[], struct sockaddr_in clientAddr) {
+	Server::write(Server::prompt);
 	std::string opt, string;
 	Merchant* merchant = NULL;
 	Customer* customer = NULL;
 	while (true) {
-		((Server*)threadid);
-		server->read(opt);
+		Server::read(opt);
 		switch (std::stoi(opt))
 		{
 		case  0:
-			server->cancelOrders(customer);
 			Commodity::saveCommodity("commodity.txt");
 			User::saveUser("user.txt");
 			string = "...disconnect ";
-			//string += clientIP;
+			string += clientIP;
 			string += ":";
-			//string += ntohs(clientAddr.sin_port);
+			string += ntohs(clientAddr.sin_port);
 			string += "\n";
-			server->write(string);
+			Server::write(string);
 			return 0;
 			break;
 
 		case  1:
-			server->signUp();
+			signUp();
 			break;
 
 		case  2:
-			server->showCommodity();
+			showCommodity();
 			break;
 
 		case  3:
-			server->searchCommodity();
+			searchCommodity();
 			break;
 
 		case  4:
-			server->signIn(merchant, customer);
+			signIn(merchant, customer);
 			break;
 
 		case  5:
-			server->signOut(merchant, customer);
+			signOut(merchant, customer);
 			break;
 
 		case  6:
-			server->editPassword(merchant, customer);
+			editPassword(merchant, customer);
 			break;
 
 		case  7:
-			server->getBalance(merchant, customer);
+			getBalance(merchant, customer);
 			break;
 
 		case  8:
-			server->consume(merchant, customer);
+			consume(merchant, customer);
 			break;
 
 		case  9:
-			server->addCommodity(merchant);
+			addCommodity(merchant);
 			break;
 
 		case 10:
-			server->editPrice(merchant);
+			editPrice(merchant);
 			break;
 
 		case 11:
-			server->editAmount(merchant);
+			editAmount(merchant);
 			break;
 
 		case 12:
-			server->charge(customer);
+			charge(customer);
 			break;
 
 		case 13:
-			server->addCommodityToShoppingCart(customer);
+			addCommodityToShoppingCart(customer);
 			break;
 
 		case 14:
-			server->deleteCommodityInShoppingCart(customer);
+			deleteCommodityInShoppingCart(customer);
 			break;
 
 		case 15:
-			server->editCommodityInShoppingCart(customer);
+			editCommodityInShoppingCart(customer);
 			break;
 
 		case 16:
-			server->showCommodityInShoppingCart(customer);
+			showCommodityInShoppingCart(customer);
 			break;
 
 		case 17:
-			server->generateOrders(customer);
+			generateOrders(customer);
 			break;
 
 		case 18:
-			server->cancelOrders(customer);
+			cancelOrders(customer);
 			break;
 
 		case 19:
-			server->showOrders(customer);
+			showOrders(customer);
 			break;
 
 		case 20:
-			server->pay(customer);
-			break;
-
-		case 21:
-			server->discount(merchant);
+			pay(customer);
 			break;
 		
 		default:
 			break;
 		}
 	}
-	close(server->conn);
-	return 0;
+	return SUCCESS;
 }
 
+int Server::conn;
 
 int main(int argc, char* argv[]) {
 	std::cout << "Welcome to transaction system server" << std::endl;
@@ -763,13 +710,10 @@ int main(int argc, char* argv[]) {
     char clientIP[INET_ADDRSTRLEN] = "";
     struct sockaddr_in clientAddr;
     socklen_t clientAddrLen = sizeof(clientAddr);
-	pthread_t threads[NUM_THREADS];
-	int threadNum = 0;
-   	Server indexes[NUM_THREADS];
     while (true) {
         std::cout << "...listening" << std::endl;
-        int conn = accept(listenfd, (struct sockaddr*)&clientAddr, &clientAddrLen);
-        if (conn < 0) {
+        Server::conn = accept(listenfd, (struct sockaddr*)&clientAddr, &clientAddrLen);
+        if (Server::conn < 0) {
             std::cout << "Error: accept" << std::endl;
             continue;
         }
@@ -778,21 +722,14 @@ int main(int argc, char* argv[]) {
         inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
 		#endif
         std::cout << "...connect " << clientIP << ":" << ntohs(clientAddr.sin_port) << std::endl;
-        indexes[threadNum].conn = conn;
-		int rc = pthread_create(&threads[threadNum], NULL, 
-                          Server::handleConnect, (void *)&(indexes[threadNum]));
-		if (rc){
-			std::cout << "Error:无法创建线程," << rc << std::endl;
-			exit(-1);
-		}
-		threadNum++;
+        Server::handleConnect(clientIP, clientAddr);
+        close(Server::conn);
     }
-	pthread_exit(NULL);
     close(listenfd);
 	Commodity::saveCommodity("commodity.txt");
 	User::saveUser("user.txt");
 	return 0;
 }
 
-// lin: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g -lpthread
-// win: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g -lws2_32 -lpthread
+// lin: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g
+// win: g++ e-commerceTradingPlatformServer.cpp user.cpp shoppingcart.cpp commodity.cpp -o server -g -lws2_32

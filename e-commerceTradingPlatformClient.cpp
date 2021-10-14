@@ -54,7 +54,7 @@ int Client::write(std::string &string) {
 }
 
 int Client::client;
-/*
+
 int main(int argc, char* argv[]) {
 	std::cout << "Welcome to transaction system client" << std::endl;
     int client;
@@ -78,6 +78,6 @@ int main(int argc, char* argv[]) {
     close(client);
 	return 0;
 }
-*/
+
 // lin: g++ e-commerceTradingPlatformClient.cpp -o client -g
 // win: g++ e-commerceTradingPlatformClient.cpp -o client -g -lws2_32

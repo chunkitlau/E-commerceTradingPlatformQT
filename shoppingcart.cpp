@@ -62,7 +62,7 @@ int Shoppingcart::addCommodity(Commodity* commodity) {
         std::map<std::string, Commodity*>::iterator iter = _commodityMap.find(commodity->getDescription());
         if (iter != _commodityMap.end()) {
             if (iter->second->getAmount() + commodity->getAmount() <= existCommodity->getAmount()) {
-                iter->second->editPrice(existCommodity->getOriginPrice());
+                iter->second->editPrice(existCommodity->getPrice());
                 iter->second->editAmount(iter->second->getAmount() + commodity->getAmount());
                 delete commodity;
                 return SUCCESS;
@@ -74,7 +74,7 @@ int Shoppingcart::addCommodity(Commodity* commodity) {
         }
         else {
             if (commodity->getAmount() <= existCommodity->getAmount()) {
-                commodity->editPrice(existCommodity->getOriginPrice());
+                commodity->editPrice(existCommodity->getPrice());
                 _commodityMap[commodity->getDescription()] = commodity;
                 return SUCCESS;
             }
@@ -96,7 +96,7 @@ int Shoppingcart::deleteCommodity(Commodity* commodity) {
     if (iter != _commodityMap.end()) {
         if (iter->second->getAmount() >= commodity->getAmount()) {
             Commodity* existCommodity = Commodity::findCommodity(commodity->getDescription());
-            iter->second->editPrice(existCommodity->getOriginPrice());
+            iter->second->editPrice(existCommodity->getPrice());
             iter->second->editAmount(iter->second->getAmount() - commodity->getAmount());
             delete commodity;
             return SUCCESS;
@@ -117,7 +117,7 @@ int Shoppingcart::editCommodity(Commodity* commodity) {
     if (iter != _commodityMap.end()) {
         Commodity* existCommodity = Commodity::findCommodity(commodity->getDescription());
         if (commodity->getAmount() <= existCommodity->getAmount()) {
-            iter->second->editPrice(existCommodity->getOriginPrice());
+            iter->second->editPrice(existCommodity->getPrice());
             iter->second->editAmount(commodity->getAmount());
             delete commodity;
             return SUCCESS;
@@ -161,7 +161,7 @@ int Shoppingcart::generateOrders(std::vector<std::string> &commodityList) {
         _orderedCommodityMap[*stringIter] = orderedCommodity;
         _commodityMap.erase(commodityIter);
         Commodity* commodity = Commodity::findCommodity(*stringIter);
-        orderedCommodity->editPrice(commodity->getOriginPrice());
+        orderedCommodity->editPrice(commodity->getPrice());
         commodity->editAmount(commodity->getAmount() - orderedCommodity->getAmount());
         _orderedTotalPrice += orderedCommodity->getPrice() * orderedCommodity->getAmount();
     }
@@ -197,7 +197,6 @@ int Shoppingcart::pay(std::string name, double &orderedTotalPrice) {
     for (std::map<std::string, Commodity*>::iterator commodityIter = _orderedCommodityMap.begin(); commodityIter != _orderedCommodityMap.end(); ++commodityIter) {
         User::findUser(Commodity::findCommodity(commodityIter->second->getDescription())->getMerchant())->charge(commodityIter->second->getPrice() * commodityIter->second->getAmount());
     }
-    cancelOrders();
     User::buying = 0;
     return SUCCESS;
 }

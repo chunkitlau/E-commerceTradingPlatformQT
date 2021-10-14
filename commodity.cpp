@@ -8,10 +8,6 @@ int Commodity::getAmount() const {
     return _amount;
 }
 
-double Commodity::getOriginPrice() const {
-    return _price;
-}
-
 int Commodity::editPrice(double price) {
     _price = price;
     _commodityMap[_description]->_price = price;
@@ -34,6 +30,7 @@ int Commodity::addCommodity(Commodity* commodity) {
         return SUCCESS;
     }
     else {
+        delete commodity;
         return ERROR1;
     }
 }
@@ -84,7 +81,7 @@ int Commodity::saveCommodity(std::string filename) {
         }
         for (std::map<std::string, Commodity*>::iterator iter = _commodityMap.begin(); iter != _commodityMap.end(); ++iter) {
             commodityFile << iter->second->_type << " " << iter->first << " " 
-                << iter->second->getOriginPrice() << " " << iter->second->_amount << " " << iter->second->_merchant << std::endl;
+                << iter->second->_price << " " << iter->second->_amount << " " << iter->second->_merchant << std::endl;
         }
         return SUCCESS;
     }
@@ -97,7 +94,7 @@ int Commodity::saveCommodity(std::string filename) {
 int Commodity::showCommodity(std::string &string) {
     string = "";
     for (std::map<std::string, Commodity*>::iterator iter = _commodityMap.begin(); iter != _commodityMap.end(); ++iter) {
-        string += iter->second->_type + " " + iter->first + " " + std::to_string(iter->second->getPrice()) + " " + 
+        string += iter->second->_type + " " + iter->first + " " + std::to_string(iter->second->_price) + " " + 
             std::to_string(iter->second->_amount) + " " + iter->second->_merchant + "\n";
     }
     return SUCCESS;
@@ -109,7 +106,7 @@ int Commodity::searchCommodity(std::string command, std::string &string) {
     string = "";
     for (std::map<std::string, Commodity*>::iterator iter = _commodityMap.begin(); iter != _commodityMap.end(); ++iter) {
         if(std::regex_match(iter->first, result, pattern)){
-            string += iter->second->_type + " " + iter->first + " " + std::to_string(iter->second->getPrice()) + " " + 
+            string += iter->second->_type + " " + iter->first + " " + std::to_string(iter->second->_price) + " " + 
                 std::to_string(iter->second->_amount) + " " + iter->second->_merchant + "\n";
         }
     }

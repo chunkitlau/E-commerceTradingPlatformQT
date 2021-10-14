@@ -32,38 +32,16 @@
  */
 class Commodity {
 public:
-	/**********************************************************
-	 * 计算价格
-	 */
 	virtual double getPrice() const = 0;
-	double getOriginPrice() const;
-	/**********************************************************
-	 * 获取描述
-	 */
 	std::string getDescription() const;
-	/**********************************************************
-	 * 获取数量
-	 */
 	int getAmount() const;
-	/**********************************************************
-	 * 修改价格
-	 */
 	int editPrice(double price);
-	/**********************************************************
-	 * 修改数量
-	 */
 	int editAmount(int amount);
-	/**********************************************************
-	 * 获取商家名
-	 */
 	std::string getMerchant() const;
 	/**********************************************************
 	 * 添加商品：支持商家添加新商品，要求已添加的商品信息长久保留。
 	 */
 	static int addCommodity(Commodity* commodity);
-	/**********************************************************
-	 * 查找商品
-	 */
 	static Commodity* findCommodity(std::string description);
 	static int loadCommodity(std::string filename);
     static int saveCommodity(std::string filename);

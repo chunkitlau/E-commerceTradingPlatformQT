@@ -53,7 +53,6 @@ static void socket_init(void);
 
 #endif
 
-#include <pthread.h>
 #include <iostream>
 #include <unistd.h>
 #include "shoppingcart.h"
@@ -61,63 +60,60 @@ static void socket_init(void);
 #include "user.h"
 
 #define BACKLOG 20
-#define NUM_THREADS 5
 #define BUFSIZE 10240
 
 class Server {
 public:
-    std::string prompt = "";
-    int signUp();
+    static std::string prompt;
+    static int signUp();
     /**********************************************************
      * 用户登录：用户通过客户端以账号密码登录平台。
      */
-    int signIn(Merchant* &merchant, Customer* &customer);
-    int signOut(Merchant* &merchant, Customer* &customer);
-    int editPassword(Merchant* &merchant, Customer* &customer);
-    int getBalance(Merchant* &merchant, Customer* &customer);
-    int charge(Customer* &customer);
-    int consume(Merchant* &merchant, Customer* &customer);
+    static int signIn(Merchant* &merchant, Customer* &customer);
+    static int signOut(Merchant* &merchant, Customer* &customer);
+    static int editPassword(Merchant* &merchant, Customer* &customer);
+    static int getBalance(Merchant* &merchant, Customer* &customer);
+    static int charge(Customer* &customer);
+    static int consume(Merchant* &merchant, Customer* &customer);
     /**********************************************************
      * 展示平台商品信息：通过客户端展示平台商品信息。
      */
-    int addCommodity(Merchant* &merchant);
+    static int addCommodity(Merchant* &merchant);
     /**********************************************************
      * 搜索平台商品信息：通过客户端依据商品名称对平台商品进行搜索筛选，并展示筛选结果。
      */
-    int showCommodity();
-    int searchCommodity();
-    int editPrice(Merchant* &merchant);
-    int editAmount(Merchant* &merchant);
+    static int showCommodity();
+    static int searchCommodity();
+    static int editPrice(Merchant* &merchant);
+    static int editAmount(Merchant* &merchant);
     /**********************************************************
      * 购物车管理：通过客户端支持消费者向购物车添加指定数量的商品。
      */
-    int addCommodityToShoppingCart(Customer* &customer);
+    static int addCommodityToShoppingCart(Customer* &customer);
     /**********************************************************
      * 购物车管理：通过客户端支持消费者向购物车删除指定数量的商品。
      */
-    int deleteCommodityInShoppingCart(Customer* &customer);
-    int editCommodityInShoppingCart(Customer* &customer);
-    int showCommodityInShoppingCart(Customer* &customer);
+    static int deleteCommodityInShoppingCart(Customer* &customer);
+    static int editCommodityInShoppingCart(Customer* &customer);
+    static int showCommodityInShoppingCart(Customer* &customer);
     /**********************************************************
      * 订单生产： 系统生成订单。
      */
-    int generateOrders(Customer* &customer);
-    int cancelOrders(Customer* &customer);
+    static int generateOrders(Customer* &customer);
+    static int cancelOrders(Customer* &customer);
     /**********************************************************
      * 订单生产： 通过客户端展示用户的订单信息。
      */
-    int showOrders(Customer* &customer);
+    static int showOrders(Customer* &customer);
     /**********************************************************
      * 订单支付：用户通过客户端向系统提交订单支付的申请，并展示系统完成支付的状态。
      */
-    int pay(Customer* &customer);
-    int discount(Merchant* &merchant);
+    static int pay(Customer* &customer);
     static int socketInit(int &listenfd);
-    int read(std::string &string);
-    int write(std::string string);
-    //static void* handleConnect(char clientIP[], struct sockaddr_in clientAddr);
-    static void* handleConnect(void *threadid);
-    int conn;
+    static int read(std::string &string);
+    static int write(std::string string);
+    static int handleConnect(char clientIP[], struct sockaddr_in clientAddr);
+    static int conn;
 protected:
 private:
 };
