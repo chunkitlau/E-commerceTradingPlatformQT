@@ -6,10 +6,8 @@
 #include <string>
 #include <map>
 #include <regex>
-#include <limits.h>
-#include <float.h>
 
-#define ERROR1 1
+#define ERROR 1
 #define ERROR_D -1
 #define SUCCESS 0
 #define EPS 1e-6
@@ -32,38 +30,13 @@
  */
 class Commodity {
 public:
-	/**********************************************************
-	 * 计算价格
-	 */
 	virtual double getPrice() const = 0;
-	double getOriginPrice() const;
-	/**********************************************************
-	 * 获取描述
-	 */
-	std::string getDescription() const;
-	/**********************************************************
-	 * 获取数量
-	 */
-	int getAmount() const;
-	/**********************************************************
-	 * 修改价格
-	 */
 	int editPrice(double price);
-	/**********************************************************
-	 * 修改数量
-	 */
 	int editAmount(int amount);
-	/**********************************************************
-	 * 获取商家名
-	 */
-	std::string getMerchant() const;
 	/**********************************************************
 	 * 添加商品：支持商家添加新商品，要求已添加的商品信息长久保留。
 	 */
 	static int addCommodity(Commodity* commodity);
-	/**********************************************************
-	 * 查找商品
-	 */
 	static Commodity* findCommodity(std::string description);
 	static int loadCommodity(std::string filename);
     static int saveCommodity(std::string filename);
@@ -76,7 +49,7 @@ public:
 	 */
     static int searchCommodity(std::string command, std::string &string);
 protected:
-	std::string _description, _type, _merchant;
+	std::string _description, _type;
 	double _price;
 	int _amount;
 	static std::map<std::string, Commodity*> _commodityMap;
@@ -89,9 +62,7 @@ private:
  */
 class Book : public Commodity {
 public:
-	Book(std::string description, int amount);
 	Book(std::string description, double price, int amount);
-	Book(std::string description, double price, int amount, std::string merchant);
 	double getPrice() const;
 	/**********************************************************
 	 * 要求6：支持对同一品类下所有产品打折的活动。 
@@ -108,9 +79,7 @@ private:
  */
 class Electronic : public Commodity {
 public:
-	Electronic(std::string description, int amount);
 	Electronic(std::string description, double price, int amount);
-	Electronic(std::string description, double price, int amount, std::string merchant);
 	double getPrice() const;
 	/**********************************************************
 	 * 要求6：支持对同一品类下所有产品打折的活动。 
@@ -126,9 +95,7 @@ private:
  */
 class Clothing : public Commodity {
 public:
-	Clothing(std::string description, int amount);
 	Clothing(std::string description, double price, int amount);
-	Clothing(std::string description, double price, int amount, std::string merchant);
 	double getPrice() const;
 	/**********************************************************
 	 * 要求6：支持对同一品类下所有产品打折的活动。 

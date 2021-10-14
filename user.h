@@ -5,12 +5,11 @@
 #include <fstream>
 #include <string>
 #include <map>
-#include "shoppingcart.h"
 #include "commodity.h"
 
 #define LOGIN 1
 #define LOGOUT 0
-#define ERROR1 1
+#define ERROR 1
 #define ERROR_D -1
 #define SUCCESS 0
 #define EPS 1e-6
@@ -60,8 +59,6 @@ public:
      * 余额管理：支持用户账号中余额的消费
      */
     int consume(double amount);
-    static int buying;
-    static User* findUser(std::string name);
     static int loadUser(std::string filename);
     //要求2：请把所有的用户账户信息写入文件（要求使用文件存储各类信息，以练习对文件的操作和流的输入输出）
     static int saveUser(std::string filename);
@@ -102,7 +99,6 @@ public:
     int addCommodity(Commodity* commodity);
     int editPrice(std::string description, double price);
     int editAmount(std::string description, int amount);
-    Shoppingcart shoppingcart;
 private:
 };
 
